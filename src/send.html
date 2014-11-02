@@ -3,8 +3,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Secret4U -- Deposit for "James-Bond alike" self-destroying secret messages</title>
-<link rel="stylesheet" href="res/pepper-grinder/jquery-ui.css">
+<title>Deposit for "James-Bond alike" self-destroying secret messages</title>
+<link rel="stylesheet" href="res/jquery-theme/jquery-ui.css">
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 <script src="res/aes.js"></script>
@@ -55,7 +55,7 @@ function sendEMail(htmlMail) {
     key=document.getElementById("symmkey").value;
     sha="LONGHASH";
     txtMail='Dear '+rec+',\n\n'+
-            'I deposited a secret message for you which is accessible under http://78.43.81.55/secure4u/receive.php?h='+sha+'\n\n'+
+            'I deposited a secret message for you which is accessible under http://secret4u.eu/secret4u/receive.php?h='+sha+'\n\n'+
             'The encryption key is:\n\n'+key+'\n\n'+
             'Please note that this message will be destroyed once the link has been accessed for the first time!\n\n'+
             'Sincerely yours,%0D%0A'+sdr;
@@ -140,7 +140,7 @@ Later on, your friend may savely retrieve the decrypted message by using the pro
     <label for="recipient">Dear</label> <input id="recipient" value="friend" title="Insert the name of your friend">,
     <label for="sender"> this is </label> <input id="sender" value="me" title="Insert your name">.<br/>
     <br/>
-    I deposited a secret message for you which is accessible under <a href="https://www.secret4u.eu/LONGHASH">this link</a>.
+    I deposited a secret message for you which is accessible under <a href="https://secret4u.eu/LONGHASH">this link</a>.
     The <label for="symmkey">encryption key is </label> <input id="symmkey" value="123456" title="Click to generate a new key">. <br/>
     Please note that this message will destroy itsself as soon as the link has been opened for the first time. <br/>
     <br/>
