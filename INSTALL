@@ -2,3 +2,9 @@ add this to your /etc/fstab to store the sqlite db directory:
 
 # for the hosted PDO DB
 tmpfs /var/www/sqlite tmpfs size=1G,uid=www-data,gid=www-data,mode=774 0 0
+
+for a preview you can see how the start page looks like
+
+cd src && firefox send.html
+
+then, however, PHP is needed for the db access!
