@@ -1,0 +1,4 @@
+add this to your /etc/fstab to store the sqlite db directory:
+
+# for the hosted PDO DB
+tmpfs /var/www/sqlite tmpfs size=1G,uid=www-data,gid=www-data,mode=774 0 0
