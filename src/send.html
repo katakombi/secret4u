@@ -1,0 +1,196 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Secret4U -- Deposit for "James-Bond alike" self-destroying secret messages</title>
+<link rel="stylesheet" href="res/pepper-grinder/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script src="res/aes.js"></script>
+<script src="res/sha1.js"></script>
+<link rel="stylesheet" href="res/style.css">
+<script>
+
+$(function() {
+$( "#accordion" ).accordion();
+});
+
+//$("#accordion").accordion({
+
+//heightStyle: "content";
+//autoHeight: false,
+//heightStyle: "content"
+
+//});
+
+
+function post(path, params, method) {
+    method = method || "post"; // Set method to post by default if not specified.
+
+    // The rest of this code assumes you are not using a library.
+    // It can be made less wordy if you use one.
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("action", path);
+
+    for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+
+            form.appendChild(hiddenField);
+         }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
+function sendEMail(htmlMail) {
+    sdr=document.getElementById("sender").value;
+    rec=document.getElementById("recipient").value;
+    key=document.getElementById("symmkey").value;
+    sha="LONGHASH";
+    txtMail='Dear '+rec+',\n\n'+
+            'I deposited a secret message for you which is accessible under http://78.43.81.55/secure4u/receive.php?h='+sha+'\n\n'+
+            'The encryption key is:\n\n'+key+'\n\n'+
+            'Please note that this message will be destroyed once the link has been accessed for the first time!\n\n'+
+            'Sincerely yours,%0D%0A'+sdr;
+
+    sha=CryptoJS.SHA1(txtMail+document.getElementById("decoded-message").value);
+
+    txtMail=txtMail.replace(/LONGHASH/,sha);
+    txtMail=txtMail.replace(/\n/g,'%0D%0A');
+    txtMail=txtMail.replace(/ /g,'%20');
+
+    msg=document.getElementById("encoded-message").value;
+    if (!msg) {
+        encode('decoded-message');
+        msg=document.getElementById("encoded-message").value;
+    }
+    post('deposit.php', { hash:sha, encmsg:msg }, "post");
+    window.open('mailto:' + rec + '?subject=A secret message from '+ sdr + ' is waiting for you&body=' + txtMail);
+}
+
+function encode(control)
+{
+    var ckey = $("#symmkey").val();
+    var x=document.getElementById(control).value;
+    var encrypted = CryptoJS.AES.encrypt(x, ckey);
+    document.getElementById("encoded-message").value=encrypted;
+}
+
+//function decode(control)
+//{
+//    var ckey = $("#symmkey").val();
+//    var x=document.getElementById(control).value;
+//    var decrypted = CryptoJS.AES.decrypt(x, ckey);
+//    decrypted = decrypted.toString(CryptoJS.enc.Utf8);
+//    document.getElementById("decoded-message").value=decrypted;
+//}
+
+$(function(){
+$('#sender').keyup(function() {
+    $('#sender_alias').val($(this).val());
+})});
+$(function(){
+$('#sender_alias').keyup(function() {
+    $('#sender').val($(this).val());
+})});
+
+$(function(){
+$('#sender').on('paste',function() {
+    setTimeout(function() { $('#sender_alias').val($('#sender').val()); }, 200 );
+})});
+$(function(){
+$('#sender_alias').on('paste',function() {
+    setTimeout(function() { $('#sender').val($('#sender_alias').val()); }, 200 );
+})});
+
+$(function(){
+$('#symmkey').click(function() {
+    $(this).val(Math.floor(Math.random()*10000000000000000));
+    encode("decoded-message");
+})});
+
+</script>
+</head>
+<style>
+
+</style>
+<body>
+<h1>Secret4U -- Deposit for "James-Bond alike" self-destroying secret messages</h1>
+<div id="accordion">
+<h3>Introduction</h3>
+<div>
+<p>
+<br/>
+You want to savely deposit a secret message for a friend? All you need to do is to complete the following steps and send the generated EMail.<br/>
+Later on, your friend may savely retrieve the decrypted message by using the provided link which will irrevocably destroy its contents on our server.
+<br/>
+</p>
+</div>
+<h3>EMail Notification Preview</h3>
+<div>
+<p>
+<div id="email-notification-preview">
+    <label for="recipient">Dear</label> <input id="recipient" value="friend" title="Insert the name of your friend">,
+    <label for="sender"> this is </label> <input id="sender" value="me" title="Insert your name">.<br/>
+    <br/>
+    I deposited a secret message for you which is accessible under <a href="https://www.secret4u.eu/LONGHASH">this link</a>.
+    The <label for="symmkey">encryption key is </label> <input id="symmkey" value="123456" title="Click to generate a new key">. <br/>
+    Please note that this message will destroy itsself as soon as the link has been opened for the first time. <br/>
+    <br/>
+    Sincerely yours, <input id="sender_alias" title="Insert your name">.<br/>
+</div>
+</p>
+</div>
+<h3>Message</h3>
+<div>
+This is what your friend will receive:
+<p>
+<textarea id='decoded-message' cols=80 rows=10  onkeyup="encode(this.id);" onpaste="encode(this.id);">
+Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
+purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
+velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+suscipit faucibus urna.
+</textarea>
+</p>
+</div>
+<h3>Encrypted Message</h3>
+<div>
+This is what will be stored on our server:
+<p>
+<textarea readonly id='encoded-message' cols=80 rows=10>
+</textarea>
+</p>
+</div>
+<h3>Frequently Asked Questions</h3>
+<div>
+<p>
+<br/>
+How does it work?
+<ul>
+    <li>Write your message or insert it via copy'n'paste.</li>
+    <li>Click "Send" to deposit the encrypted message on our server. Simultaneously an email is being generated containing retrieval link and decryption key.</li>
+    <li>Use your contacts to send the email to your friend!</li>
+</ul>
+What about privacy?
+<ul>
+    <li>The only information stored on our servers are the encrypted messages</li>
+    <li>Encryption and decryption is performed on your local computer using the browsers javascript</li>
+    <li>A message is destroyed as soon as its retrieval link is accessed, or at the latest 30 days after posting</li>
+</ul>
+</p>
+</div>
+</div>
+<div id="send-email">
+    <button onclick='sendEMail(document.getElementById("email-notification-preview").innerHTML)'>
+        Send...
+    </button>
+</div>
+</body>
+</html>
