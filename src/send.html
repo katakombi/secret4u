@@ -5,8 +5,8 @@
 <meta charset="utf-8">
 <title>Deposit for "James-Bond alike" self-destroying secret messages</title>
 <link rel="stylesheet" href="res/jquery-theme/jquery-ui.css">
-<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 <script src="res/aes.js"></script>
 <script src="res/sha1.js"></script>
 <link rel="stylesheet" href="res/style.css">
@@ -55,10 +55,10 @@ function sendEMail(htmlMail) {
     key=document.getElementById("symmkey").value;
     sha="LONGHASH";
     txtMail='Dear '+rec+',\n\n'+
-            'I deposited a secret message for you which is accessible under http://secret4u.eu/secret4u/receive.php?h='+sha+'\n\n'+
+            'I deposited a secret message for you which is accessible under https://secret4u.eu/r.php?h='+sha+'\n\n'+
             'The encryption key is:\n\n'+key+'\n\n'+
             'Please note that this message will be destroyed once the link has been accessed for the first time!\n\n'+
-            'Sincerely yours,%0D%0A'+sdr;
+            'Sincerely yours,\n'+sdr;
 
     sha=CryptoJS.SHA1(txtMail+document.getElementById("decoded-message").value);
 
@@ -122,7 +122,7 @@ $('#symmkey').click(function() {
 
 </style>
 <body>
-<h1>Secret4U -- Deposit for "James-Bond alike" self-destroying secret messages</h1>
+<h1>Deposit for "James-Bond alike" self-destroying secret messages</h1>
 <div id="accordion">
 <h3>Introduction</h3>
 <div>
@@ -184,6 +184,7 @@ What about privacy?
     <li>Encryption and decryption is performed on your local computer using the browsers javascript</li>
     <li>A message is destroyed as soon as its retrieval link is accessed, or at the latest 30 days after posting</li>
 </ul>
+(c) 2014 by <a href="mailto:stefan.kombrink@mailbox.org">Stefan Kombrink</a>
 </p>
 </div>
 </div>
