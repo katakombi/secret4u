@@ -3,10 +3,10 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Secret4U -- Deposit for "James-Bond alike" self-destroying secret messages</title>
+<title> Deposit for "James-Bond alike" self-destroying secret messages</title>
 <link rel="stylesheet" href="res/pepper-grinder/jquery-ui.css">
-<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 <script src="res/aes.js"></script>
 <script src="res/sha1.js"></script>
 <link rel="stylesheet" href="res/style.css">
@@ -53,7 +53,7 @@ $('#symmkey').on('paste',function() {
 <style>
 </style>
 <body>
-<h1>Secret4U -- Deposit for "James-Bond alike" self-destroying secret messages</h1>
+<h1>Deposit for "James-Bond alike" self-destroying secret messages</h1>
 <div id="accordion">
 <h3>Encrypted Message</h3>
 <div>
@@ -105,6 +105,7 @@ Find the message of your friend below. A subsequent access will not be possible 
 </textarea>
 <br>
 <label for="symmkey">Encryption key </label> <input id="symmkey" value="" title="Copy&paste the key from your email">.
+You can send a <a href="index.html">reply message</a> immediately.
 </p>
 </div>
 <h3>Frequently Asked Questions</h3>
@@ -123,6 +124,7 @@ What about privacy?
     <li>Encryption and decryption is performed on your local computer using the browsers javascript</li>
     <li>A message is destroyed as soon as its retrieval link is accessed, or at the latest 30 days after posting</li>
 </ul>
+(c) 2014 by <a href="mailto:stefan.kombrink@mailbox.org">Stefan Kombrink</a>
 </p>
 </div>
 </div>
