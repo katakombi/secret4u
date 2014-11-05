@@ -116,6 +116,11 @@ $('#symmkey').click(function() {
     encode("decoded-message");
 })});
 
+$( document ).ready(function() {
+    $('#symmkey').val(Math.floor(Math.random()*10000000000000000));
+    encode('decoded-message');
+});
+
 </script>
 </head>
 <style>
@@ -153,10 +158,7 @@ Later on, your friend may savely retrieve the decrypted message by using the pro
 This is what your friend will receive:
 <p>
 <textarea id='decoded-message' cols=80 rows=10  onkeyup="encode(this.id);" onpaste="encode(this.id);">
-Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
-purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
-velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
-suscipit faucibus urna.
+Lorsque le vin entre, le secret sort.
 </textarea>
 </p>
 </div>
