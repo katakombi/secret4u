@@ -13,17 +13,9 @@
 <script>
 
 $(function() {
-	$( "#accordion" ).accordion({ active: 0});
+	$( "#accordion" ).accordion({ active: 0, resizable: true });
+	$( "#encmsg" ).hide();
 });
-
-//$("#accordion").accordion({
-
-//heightStyle: "content";
-//autoHeight: false,
-//heightStyle: "content"
-
-//});
-
 
 function post(path, params, method) {
     method = method || "post"; // Set method to post by default if not specified.
@@ -176,7 +168,7 @@ This is what will be stored on our server:
 <br/>
 How does it work?
 <ul>
-    <li>Write your message or insert it via copy'n'paste.</li>
+    <li>Write your message or insert it via copy&paste.</li>
     <li>Click "Send" to deposit the encrypted message on our server. Simultaneously an email is being generated containing retrieval link and decryption key.</li>
     <li>Use your contacts to send the email to your friend!</li>
 </ul>
