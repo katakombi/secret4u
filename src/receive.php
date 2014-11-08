@@ -13,10 +13,10 @@
 <script>
 
 $(function() {
-$( "#accordion" ).accordion();
+$( "#accordion" ).accordion({ active: 1 });
 });
 
-//$( ".selector" ).accordion({ active: 2 });
+//$( "#accordion" ).accordion({ active: 2 });
 //$("#accordion").accordion({
 
 //heightStyle: "content";
@@ -34,6 +34,7 @@ function decode(control)
     var decrypted = CryptoJS.AES.decrypt(x, ckey);
     decrypted = decrypted.toString(CryptoJS.enc.Utf8);
     document.getElementById("decoded-message").value=decrypted;
+    document.getElementById("decoded-reply").value="> \n> "+decrypted.replace(/\n/,"\n> ");
 }
 
 
@@ -66,14 +67,25 @@ This is the encrypted message retrieved from our server:
     //$db = new PDO('sqlite::memory:', NULL, NULL, array(PDO::ATTR_PERSISTENT => true));
       $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+      $db->beginTransaction();
       $query = $db->prepare("SELECT * FROM messages WHERE hash=?");
       $query->bindParam(1, $_GET["h"], PDO::PARAM_STR);
 
       $query->execute();
       $result = $query->fetchall();
 
+      if ($result != null) // entry was found
+      {
+	      $query2 = $db->prepare("UPDATE messages SET message=NULL WHERE hash=?");
+	      $query2->bindParam(1, $_GET["h"], PDO::PARAM_STR);
+	      $query2->execute();
+      }
+      $db->commit();
+
       foreach($result as $row)
       {
+	$msg=$row['message'] || "";
+	
     ?>
         <textarea readonly id='encoded-message' cols=80 rows=10><?php echo $row['message'];?></textarea>
     <?php
@@ -89,7 +101,7 @@ This is the encrypted message retrieved from our server:
 
     }
     catch(PDOException $e) {
-        echo "Ouch!<br>";
+         echo "Ouch!<br>";
          echo $e->getMessage();
          echo "<br/>";
          echo $e->getCode();
@@ -105,7 +117,14 @@ Find the message of your friend below. A subsequent access will not be possible 
 </textarea>
 <br>
 <label for="symmkey">Encryption key </label> <input id="symmkey" value="" title="Copy&paste the key from your email">.
-You can send a <a href="index.html">reply message</a> immediately.
+You can send a reply message immediately.
+</p>
+</div>
+<h3>Reply</h3>
+<div>
+<p>
+<textarea id='decoded-reply' cols=80 rows=10">
+</textarea>
 </p>
 </div>
 <h3>Frequently Asked Questions</h3>
@@ -128,5 +147,12 @@ What about privacy?
 </p>
 </div>
 </div>
+
+<div id="send-email">
+    <button onclick='sendEMail(document.getElementById("email-notification-preview").innerHTML)'>
+        Send...
+    </button>
+</div>
+
 </body>
 </html>
