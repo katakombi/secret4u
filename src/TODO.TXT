@@ -1,0 +1,15 @@
+* Redesign sqlite table: replace 'read' column by an 'access-time' column
+* Implement a 30days expiration functionality
+* Redesign all functions to be more flexible/reusable by 
+  - using more params
+  - including them as external js files
+* Replace text fields by something more sophisticated (rich-text, image uploads, etc)
+* Kick out unneccessary elements (e.g. key fields, encrypted text fields)
+* Do a lot of testing on the email client invocation mechanism:
+  - Does it work everywhere?
+  - Can it work without opening a blank tab/window?
+* Analyze drawbacks of the approach:
+  - Cross-site scripting?
+  - Man-in-the-middle attack?
+  - ...?
+* UI overhaul: orientate at pastebin maybe? Most importantly, we need bigger message window
