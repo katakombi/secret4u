@@ -16,16 +16,13 @@ $(function() {
 $( "#accordion" ).accordion({ active: 1 });
 });
 
-//$( "#accordion" ).accordion({ active: 2 });
-//$("#accordion").accordion({
-
-//heightStyle: "content";
-//autoHeight: false,
-//heightStyle: "content"
-
-//});
-
-
+function encode(control)
+{
+    var ckey = $("#symmkey").val();
+    var x=document.getElementById(control).value;
+    var encrypted = CryptoJS.AES.encrypt(x, ckey);
+    document.getElementById("encoded-message").value=encrypted;
+}
 
 function decode(control)
 {
@@ -37,6 +34,61 @@ function decode(control)
     document.getElementById("decoded-reply").value="> \n> "+decrypted.replace(/\n/,"\n> ");
 }
 
+function encodeReply(control)
+{
+    var ckey = $("#symmkey").val();
+    var x=document.getElementById(control).value;
+    var encrypted = CryptoJS.AES.encrypt(x, ckey);
+    document.getElementById("encoded-reply").value=encrypted;
+}
+
+function post(path, params, method) {
+    method = method || "post"; // Set method to post by default if not specified.
+
+    // The rest of this code assumes you are not using a library.
+    // It can be made less wordy if you use one.
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("action", path);
+
+    for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+
+            form.appendChild(hiddenField);
+         }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
+function sendEMail() {
+    key=Math.floor(Math.random()*10000000000000000);
+    $('#symmkey').val(key);
+
+    sha="LONGHASH";
+    txtMail='I deposited a reply to your secret message which is accessible under https://secret4u.eu/r.php?h='+sha+'\n\n'+
+            'The encryption key is:\n\n'+key+'\n\n'+
+            'Please note that this message will be destroyed once the link has been accessed for the first time!\n\n'
+
+    sha=CryptoJS.SHA1(txtMail+document.getElementById("decoded-reply").value);
+
+    txtMail=txtMail.replace(/LONGHASH/,sha);
+    txtMail=txtMail.replace(/\n/g,'%0D%0A');
+    txtMail=txtMail.replace(/ /g,'%20');
+
+    msg=document.getElementById("encoded-reply").value;
+    if (!msg) {
+        encodeReply('decoded-reply');
+        msg=document.getElementById("encoded-reply").value;
+    }
+    post('deposit.php', { hash:sha, encmsg:msg }, "post");
+    window.open('mailto:myfriend?subject=A reply to your secret message is waiting for you&body=' + txtMail);
+}
 
 $(function(){
 $('#symmkey').keyup(function() {
@@ -101,7 +153,7 @@ This is the encrypted message retrieved from our server:
 
     }
     catch(PDOException $e) {
-         echo "Ouch!<br>";
+         echo "Ouch!<br/>";
          echo $e->getMessage();
          echo "<br/>";
          echo $e->getCode();
@@ -115,7 +167,7 @@ Find the message of your friend below. A subsequent access will not be possible 
 <p>
 <textarea readonly id='decoded-message' cols=80 rows=10">
 </textarea>
-<br>
+<br/>
 <label for="symmkey">Encryption key </label> <input id="symmkey" value="" title="Copy&paste the key from your email">.
 You can send a reply message immediately.
 </p>
@@ -125,6 +177,16 @@ You can send a reply message immediately.
 <p>
 <textarea id='decoded-reply' cols=80 rows=10">
 </textarea>
+<br/>
+For safety reasons a new key will be randomly generated!
+</p>
+</div>
+<h3>Encoded Reply</h3>
+<div>
+<p>
+<textarea id='encoded-reply' cols=80 rows=10">
+</textarea>
+This will be stored on our servers.
 </p>
 </div>
 <h3>Frequently Asked Questions</h3>
@@ -149,7 +211,7 @@ What about privacy?
 </div>
 
 <div id="send-email">
-    <button onclick='sendEMail(document.getElementById("email-notification-preview").innerHTML)'>
+    <button onclick='sendEMail()'>
         Send...
     </button>
 </div>
