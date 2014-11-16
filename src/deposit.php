@@ -5,8 +5,8 @@
 <meta charset="utf-8">
 <title>Secret4U -- Message has been stored</title>
 <link rel="stylesheet" href="res/pepper-grinder/jquery-ui.css">
-<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 <link rel="stylesheet" href="res/style.css">
 <script>
 
